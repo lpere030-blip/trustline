@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Staff Dashboard</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    #dashboard { display: none; }
+  </style>
+</head>
+<body>
+
+  <h1>Staff Access</h1>
+
+  <div id="login">
+    <input type="password" id="codeInput" placeholder="Enter access code">
+    <button onclick="checkCode()">Enter</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <div id="dashboard">
+    <h2>Welcome, Staff</h2>
+    <p>This is where reports will appear.</p>
+  </div>
+
+  <script>
+    function checkCode() {
+      const input = document.getElementById("codeInput").value;
+      const correctCode = "landon is sigma";
+
+      if (input === correctCode) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+      } else {
+        document.getElementById("error").innerText = "Wrong code.";
+      }
+    }
+  </script>
+
+</body>
+</html>
