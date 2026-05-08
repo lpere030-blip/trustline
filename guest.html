@@ -120,6 +120,25 @@
       localStorage.setItem(
         "reports",
         JSON.stringify(reports)
+        <div class="report-info">
+  Victim: ${report.victim}
+</div>
+
+<div class="report-info">
+  Reported Person: ${report.bully}
+</div>
+
+<div class="report-info">
+  Severity: ${report.severity}
+</div>
+
+<div class="report-info">
+  Incident Date: ${report.date}
+</div>
+
+<div class="report-info">
+  Evidence: ${report.evidence || "None"}
+</div>
       );
 
       renderReports();
