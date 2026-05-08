@@ -1,247 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Staff Dashboard</title>
+<title>TrustLine</title>
 
-  <style>
+<style>
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    body{
-      font-family:Segoe UI, sans-serif;
-      background:#f4f6f9;
-      color:#1a1a2e;
-      padding:30px;
-    }
+body{
+  font-family:Segoe UI,sans-serif;
+  background:#f4f6f9;
+  color:#1a1a2e;
+  padding:25px;
+}
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:25px;
-    }
+/* TOP BAR */
 
-    h1{
-      font-size:28px;
-    }
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
 
-    .logout-btn{
-      background:#dc2626;
-      color:white;
-      border:none;
-      padding:10px 18px;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:600;
-    }
+.staff-btn{
+  background:#1a1a2e;
+  color:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
 
-    .logout-btn:hover{
-      background:#b91c1c;
-    }
+.staff-btn:hover{
+  background:#2d2d4e;
+}
 
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:15px;
-      margin-bottom:25px;
-    }
+/* FORM */
 
-    .card{
-      background:white;
-      border-radius:14px;
-      padding:20px;
-      border:1px solid #e5e7eb;
-      box-shadow:0 2px 5px rgba(0,0,0,0.03);
-    }
+.container{
+  max-width:700px;
+  margin:auto;
+  background:white;
+  padding:25px;
+  border-radius:14px;
+  border:1px solid #e5e7eb;
+}
 
-    .stat-number{
-      font-size:34px;
-      font-weight:700;
-      margin-bottom:5px;
-    }
+h1{
+  margin-bottom:20px;
+}
 
-    .stat-label{
-      color:#6b7280;
-      font-size:14px;
-    }
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  margin-bottom:18px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+  font-size:15px;
+}
 
-    .reports-title{
-      font-size:18px;
-      margin-bottom:15px;
-      font-weight:600;
-    }
+textarea{
+  resize:vertical;
+}
 
-    .report{
-      background:white;
-      border-radius:14px;
-      padding:18px;
-      margin-bottom:15px;
-      border:1px solid #e5e7eb;
-    }
+.submit-btn{
+  background:#1a1a2e;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:600;
+}
 
-    .report-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:10px;
-      flex-wrap:wrap;
-      gap:10px;
-    }
+.submit-btn:hover{
+  background:#2d2d4e;
+}
 
-    .badge{
-      padding:5px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:600;
-    }
+/* DASHBOARD */
 
-    .badge-new{
-      background:#fee2e2;
-      color:#b91c1c;
-    }
+#staffDashboard{
+  display:none;
+  margin-top:40px;
+}
 
-    .badge-resolved{
-      background:#dcfce7;
-      color:#15803d;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+  margin-bottom:25px;
+}
 
-    .report-info{
-      color:#6b7280;
-      font-size:13px;
-      margin-bottom:10px;
-    }
+.card{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  border:1px solid #e5e7eb;
+}
 
-    .resolve-btn{
-      margin-top:12px;
-      padding:8px 14px;
-      border:none;
-      border-radius:8px;
-      background:#1a1a2e;
-      color:white;
-      cursor:pointer;
-    }
+.stat-number{
+  font-size:34px;
+  font-weight:700;
+  margin-bottom:5px;
+}
 
-    .resolve-btn:hover{
-      background:#2d2d4e;
-    }
+.stat-label{
+  color:#6b7280;
+  font-size:14px;
+}
 
-  </style>
+.report{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:15px;
+  border:1px solid #e5e7eb;
+}
+
+.report-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+
+.badge{
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.badge-new{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.badge-resolved{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.report-info{
+  color:#6b7280;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.resolve-btn{
+  margin-top:12px;
+  padding:8px 14px;
+  border:none;
+  border-radius:8px;
+  background:#1a1a2e;
+  color:white;
+  cursor:pointer;
+}
+
+.resolve-btn:hover{
+  background:#2d2d4e;
+}
+
+</style>
 </head>
 
 <body>
 
-  <div class="topbar">
+<div class="topbar">
 
-    <h1>Staff Dashboard</h1>
+  <h2>TrustLine</h2>
 
-    <button class="logout-btn" onclick="logout()">
-      Logout
-    </button>
+  <button class="staff-btn" onclick="openDashboard()">
+    Staff Dashboard
+  </button>
 
-  </div>
+</div>
+
+<!-- GUEST FORM -->
+
+<div class="container">
+
+  <h1>Submit a Report</h1>
+
+  <input
+    type="text"
+    id="name"
+    placeholder="Your Name">
+
+  <select id="type">
+    <option>Cyberbullying</option>
+    <option>Verbal Harassment</option>
+    <option>Social Exclusion</option>
+    <option>Physical Bullying</option>
+  </select>
+
+  <input
+    type="text"
+    id="location"
+    placeholder="Location">
+
+  <textarea
+    id="desc"
+    rows="5"
+    placeholder="Describe what happened"></textarea>
+
+  <button
+    class="submit-btn"
+    onclick="submitReport()">
+
+    Submit Report
+
+  </button>
+
+</div>
+
+<!-- STAFF DASHBOARD -->
+
+<div id="staffDashboard">
+
+  <h1 style="margin-bottom:20px;">
+    Staff Dashboard
+  </h1>
 
   <div class="stats">
 
     <div class="card">
-      <div class="stat-number" id="totalReports">3</div>
+      <div class="stat-number" id="totalReports">0</div>
       <div class="stat-label">Total Reports</div>
     </div>
 
     <div class="card">
-      <div class="stat-number" style="color:#b91c1c;" id="newReports">2</div>
-      <div class="stat-label">Need Review</div>
+      <div
+        class="stat-number"
+        style="color:#b91c1c;"
+        id="newReports">
+        0
+      </div>
+
+      <div class="stat-label">
+        Need Review
+      </div>
     </div>
 
     <div class="card">
-      <div class="stat-number" style="color:#15803d;" id="resolvedReports">1</div>
-      <div class="stat-label">Resolved</div>
+      <div
+        class="stat-number"
+        style="color:#15803d;"
+        id="resolvedReports">
+        0
+      </div>
+
+      <div class="stat-label">
+        Resolved
+      </div>
     </div>
 
-  </div>
-
-  <div class="reports-title">
-    Recent Reports
   </div>
 
   <div id="reportsContainer"></div>
 
+</div>
+
 <script>
 
-  // EXTRA PASSWORD PROTECTION
-  // If someone opens staff.html directly
+let reports =
+  JSON.parse(localStorage.getItem("reports")) || [];
 
-  const access = prompt("Enter staff access code:");
+/* SUBMIT REPORT */
+
+function submitReport(){
+
+  const report = {
+
+    id: Date.now(),
+
+    name:
+      document.getElementById("name").value,
+
+    type:
+      document.getElementById("type").value,
+
+    location:
+      document.getElementById("location").value,
+
+    desc:
+      document.getElementById("desc").value,
+
+    status:"new",
+
+    time:"Just now"
+
+  };
+
+  reports.unshift(report);
+
+  localStorage.setItem(
+    "reports",
+    JSON.stringify(reports)
+  );
+
+  alert("Report submitted successfully.");
+
+  location.reload();
+
+}
+
+/* OPEN STAFF DASHBOARD */
+
+function openDashboard(){
+
+  const access =
+    prompt("Enter staff access code:");
 
   if(access !== "tungsahur"){
 
     alert("Access denied.");
+    return;
 
-    window.location.href = "index.html";
   }
 
-  // SAMPLE REPORTS
+  document.getElementById(
+    "staffDashboard"
+  ).style.display = "block";
 
-  let reports = [
+  renderReports();
 
-    {
-      id:1,
-      type:"Cyberbullying",
-      location:"Instagram",
-      desc:"Mean messages being sent online.",
-      status:"new",
-      time:"2 hours ago"
-    },
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior:"smooth"
+  });
 
-    {
-      id:2,
-      type:"Verbal Harassment",
-      location:"Hallway",
-      desc:"Students insulting another student.",
-      status:"new",
-      time:"45 mins ago"
-    },
+}
 
-    {
-      id:3,
-      type:"Social Exclusion",
-      location:"Cafeteria",
-      desc:"Student being excluded daily.",
-      status:"resolved",
-      time:"Yesterday"
-    }
+/* RENDER REPORTS */
 
-  ];
+function renderReports(){
 
-  // RENDER REPORTS
+  const container =
+    document.getElementById("reportsContainer");
 
-  function renderReports(){
+  const newCount =
+    reports.filter(r => r.status === "new").length;
 
-    const container =
-      document.getElementById("reportsContainer");
+  const resolvedCount =
+    reports.filter(
+      r => r.status === "resolved"
+    ).length;
 
-    const newCount =
-      reports.filter(r => r.status === "new").length;
+  document.getElementById(
+    "totalReports"
+  ).textContent = reports.length;
 
-    const resolvedCount =
-      reports.filter(r => r.status === "resolved").length;
+  document.getElementById(
+    "newReports"
+  ).textContent = newCount;
 
-    document.getElementById("totalReports").textContent =
-      reports.length;
+  document.getElementById(
+    "resolvedReports"
+  ).textContent = resolvedCount;
 
-    document.getElementById("newReports").textContent =
-      newCount;
+  if(reports.length === 0){
 
-    document.getElementById("resolvedReports").textContent =
-      resolvedCount;
+    container.innerHTML = `
+      <div class="report">
+        No reports submitted yet.
+      </div>
+    `;
 
-    container.innerHTML = reports.map(report => `
+    return;
+
+  }
+
+  container.innerHTML =
+    reports.map(report => `
 
       <div class="report">
 
@@ -269,8 +414,12 @@
           ${report.location} • ${report.time}
         </div>
 
-        <div>
+        <div style="margin-bottom:10px;">
           ${report.desc}
+        </div>
+
+        <div class="report-info">
+          Submitted by: ${report.name}
         </div>
 
         ${
@@ -279,7 +428,9 @@
             <button
               class="resolve-btn"
               onclick="resolveReport(${report.id})">
+
               Mark Resolved
+
             </button>
           `
           : ""
@@ -289,35 +440,29 @@
 
     `).join("");
 
-  }
+}
 
-  // RESOLVE REPORT
+/* RESOLVE REPORT */
 
-  function resolveReport(id){
+function resolveReport(id){
 
-    const report =
-      reports.find(r => r.id === id);
+  const report =
+    reports.find(r => r.id === id);
 
-    if(report){
+  if(report){
 
-      report.status = "resolved";
+    report.status = "resolved";
 
-      renderReports();
-    }
+    localStorage.setItem(
+      "reports",
+      JSON.stringify(reports)
+    );
 
-  }
-
-  // LOGOUT
-
-  function logout(){
-
-    window.location.href = "index.html";
+    renderReports();
 
   }
 
-  // INITIAL LOAD
-
-  renderReports();
+}
 
 </script>
 
