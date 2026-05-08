@@ -1,123 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Safety Reporter</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1a2e;
+      color: white;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    header p {
+      font-size: 13px;
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab {
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: 1.5px solid #d1d5db;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: #1a1a2e;
+      color: white;
+      border-color: #1a1a2e;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tip {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #1e40af;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    select,
+    textarea,
+    input[type=text] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fafafa;
+      margin-bottom: 1rem;
+      font-family: inherit;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .btn {
+      padding: 11px 24px;
+      border-radius: 8px;
+      border: 1.5px solid #e5e7eb;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: #1a1a2e;
+      color: white;
+      border-color: #1a1a2e;
+      width: 100%;
+    }
+
+    .success-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .stat {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: 600;
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .badge-new {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-done {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .report-item {
+      border-bottom: 1px solid #f3f4f6;
+      padding: 14px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .urgent {
+      font-size: 12px;
+      color: #b91c1c;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .admin-note {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #92400e;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>School Safety Reporter</h1>
+    <p>All reports are 100% anonymous</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('student')">
+      Student report
+    </button>
+
+    <button class="tab" onclick="showTab('admin')">
+      Staff dashboard
+    </button>
+  </div>
+
+  <!-- STUDENT TAB -->
+  <div id="tab-student">
+
+    <div class="tip">
+      Your name is never saved. No one will know who sent this report.
+    </div>
+
+    <div class="card" id="form-card">
+
+      <label>What type of incident is this?</label>
+
+      <select id="incident-type">
+        <option value="">Choose one...</option>
+        <option>Bullying (in person)</option>
+        <option>Cyberbullying (online)</option>
+        <option>Physical altercation</option>
+        <option>Verbal harassment</option>
+        <option>Exclusion / social bullying</option>
+        <option>Other concern</option>
+      </select>
+
+      <label>Where did it happen?</label>
+
+      <select id="location">
+        <option value="">Choose one...</option>
+        <option>Classroom</option>
+        <option>Hallway</option>
+        <option>Cafeteria</option>
+        <option>Bathroom</option>
+        <option>Outside / playground</option>
+        <option>Online / social media</option>
+      </select>
+
+      <label>Describe what happened</label>
+
+      <textarea id="description"></textarea>
+
+      <label>Immediate danger?</label>
+
+      <select id="danger">
+        <option>No</option>
+        <option>Yes</option>
+      </select>
+
+      <button class="btn btn-primary" onclick="submitReport()">
+        Send report anonymously
+      </button>
+
+    </div>
+
+    <div id="success-card" style="display:none;">
+
+      <div class="success-box">
+
+        <h2>Report Sent</h2>
+
+        <p style="margin:15px 0;">
+          A staff member will review this.
+        </p>
+
+        <button class="btn" onclick="resetForm()">
+          Submit another report
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ADMIN TAB -->
+  <div id="tab-admin" style="display:none;">
+
+    <div class="admin-note">
+      Staff only dashboard.
+    </div>
+
+    <div class="stat-row">
+
+      <div class="stat">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-lbl">Total reports</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num" id="stat-new">0</div>
+        <div class="stat-lbl">Need review</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num" id="stat-done">0</div>
+        <div class="stat-lbl">Resolved</div>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <p class="section-title">
+        Recent reports
+      </p>
+
+      <div id="report-items"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
 <script>
+
+  // SAMPLE REPORTS
+
   const sampleReports = [
-    { id: 1, type: "Cyberbullying (online)", location: "Online / social media", timing: "This week", desc: "Someone is sending mean messages to a student in our grade on Instagram.", danger: "No, but it needs attention", status: "new", time: "2 hours ago" },
-    { id: 2, type: "Verbal harassment", location: "Hallway", timing: "Today", desc: "A group of older students keep making fun of someone near the lockers every morning.", danger: "It keeps happening", status: "new", time: "45 mins ago" },
-    { id: 3, type: "Exclusion / social bullying", location: "Cafeteria", timing: "It keeps happening", desc: "A student keeps being told they cannot sit with any group at lunch.", danger: "No, but it needs attention", status: "resolved", time: "Yesterday" }
+
+    {
+      id: 1,
+      type: "Cyberbullying (online)",
+      location: "Online / social media",
+      desc: "Someone is sending mean messages.",
+      danger: "No",
+      status: "new",
+      time: "2 hours ago"
+    },
+
+    {
+      id: 2,
+      type: "Verbal harassment",
+      location: "Hallway",
+      desc: "Students making fun of another student.",
+      danger: "Yes",
+      status: "new",
+      time: "45 mins ago"
+    }
+
   ];
 
   let reports = [...sampleReports];
 
+  // TAB SYSTEM WITH PASSWORD
+
   function showTab(tab) {
 
-    // PASSWORD PROTECTION FOR STAFF DASHBOARD
+    // PASSWORD FOR STAFF DASHBOARD
+
     if (tab === 'admin') {
+
       const code = prompt("Enter staff access code:");
 
       if (code !== "tungsahur") {
+
         alert("Incorrect code.");
         return;
       }
     }
 
-    document.getElementById('tab-student').style.display = tab === 'student' ? 'block' : 'none';
-    document.getElementById('tab-admin').style.display = tab === 'admin' ? 'block' : 'none';
+    document.getElementById('tab-student').style.display =
+      tab === 'student' ? 'block' : 'none';
+
+    document.getElementById('tab-admin').style.display =
+      tab === 'admin' ? 'block' : 'none';
 
     document.querySelectorAll('.tab').forEach((t, i) => {
+
       t.classList.toggle(
         'active',
         (i === 0 && tab === 'student') ||
         (i === 1 && tab === 'admin')
       );
+
     });
 
-    if (tab === 'admin') renderReports();
+    if (tab === 'admin') {
+      renderReports();
+    }
+
   }
 
+  // SUBMIT REPORT
+
   function submitReport() {
-    const type = document.getElementById('incident-type').value;
-    const desc = document.getElementById('description').value;
+
+    const type =
+      document.getElementById('incident-type').value;
+
+    const desc =
+      document.getElementById('description').value;
 
     if (!type || !desc.trim()) {
-      alert('Please fill in the incident type and description.');
+
+      alert("Please complete the form.");
       return;
     }
 
     const newReport = {
+
       id: reports.length + 1,
+
       type,
-      location: document.getElementById('location').value || 'Not specified',
-      timing: document.getElementById('timing').value || 'Not specified',
+
+      location:
+        document.getElementById('location').value,
+
       desc,
-      danger: document.getElementById('danger').value,
-      status: 'new',
-      time: 'Just now'
+
+      danger:
+        document.getElementById('danger').value,
+
+      status: "new",
+
+      time: "Just now"
     };
 
     reports.unshift(newReport);
 
     document.getElementById('form-card').style.display = 'none';
+
     document.getElementById('success-card').style.display = 'block';
+
   }
 
+  // RESET FORM
+
   function resetForm() {
+
     document.getElementById('form-card').style.display = 'block';
+
     document.getElementById('success-card').style.display = 'none';
 
     document.getElementById('incident-type').value = '';
+
     document.getElementById('location').value = '';
-    document.getElementById('timing').value = '';
+
     document.getElementById('description').value = '';
-    document.getElementById('danger').value = 'No, but it needs attention';
+
+    document.getElementById('danger').value = 'No';
+
   }
+
+  // MARK RESOLVED
 
   function markResolved(id) {
-    const r = reports.find(r => r.id === id);
 
-    if (r) r.status = 'resolved';
+    const report = reports.find(r => r.id === id);
+
+    if (report) {
+      report.status = "resolved";
+    }
 
     renderReports();
+
   }
 
+  // RENDER REPORTS
+
   function renderReports() {
-    const newCount = reports.filter(r => r.status === 'new').length;
-    const doneCount = reports.filter(r => r.status === 'resolved').length;
 
-    document.getElementById('stat-total').textContent = reports.length;
-    document.getElementById('stat-new').textContent = newCount;
-    document.getElementById('stat-done').textContent = doneCount;
+    const newCount =
+      reports.filter(r => r.status === 'new').length;
 
-    const container = document.getElementById('report-items');
+    const doneCount =
+      reports.filter(r => r.status === 'resolved').length;
+
+    document.getElementById('stat-total').textContent =
+      reports.length;
+
+    document.getElementById('stat-new').textContent =
+      newCount;
+
+    document.getElementById('stat-done').textContent =
+      doneCount;
+
+    const container =
+      document.getElementById('report-items');
 
     container.innerHTML = reports.map(r => `
-      <div class="report-item">
-        <div style="flex:1;">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap;">
-            <span style="font-size:15px; font-weight:600;">${r.type}</span>
 
-            <span class="badge ${r.status === 'new' ? 'badge-new' : 'badge-done'}">
-              ${r.status === 'new' ? 'Needs review' : 'Resolved'}
+      <div class="report-item">
+
+        <div style="flex:1;">
+
+          <div style="margin-bottom:5px;">
+
+            <span style="font-weight:600;">
+              ${r.type}
             </span>
+
+            <span class="badge ${r.status === 'new'
+              ? 'badge-new'
+              : 'badge-done'}">
+
+              ${r.status === 'new'
+                ? 'Needs review'
+                : 'Resolved'}
+
+            </span>
+
           </div>
 
-          <p style="font-size:13px; color:#6b7280; margin-bottom:5px;">
-            ${r.location} &middot; ${r.time}
+          <p style="font-size:13px; color:#6b7280;">
+            ${r.location} • ${r.time}
           </p>
 
-          <p style="font-size:14px;">
+          <p style="margin-top:6px;">
             ${r.desc}
           </p>
 
-          ${r.danger === 'Yes, please act quickly'
+          ${r.danger === 'Yes'
             ? '<p class="urgent">⚠ Immediate attention needed</p>'
             : ''
           }
+
         </div>
 
         ${r.status === 'new'
-          ? `<button class="btn" style="font-size:12px; padding:7px 14px; white-space:nowrap;" onclick="markResolved(${r.id})">Mark resolved</button>`
+          ? `<button class="btn"
+              onclick="markResolved(${r.id})">
+              Mark resolved
+            </button>`
           : ''
         }
+
       </div>
+
     `).join('');
+
   }
+
 </script>
+
+</body>
+</html>
