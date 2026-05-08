@@ -1,0 +1,143 @@
+<script>
+
+  // STAFF PASSWORD
+
+  const access = prompt("Enter staff access code:");
+
+  if(access !== "tungsahur"){
+
+    alert("Access denied.");
+    window.location.href = "index.html";
+
+  }
+
+  // LOAD REPORTS FROM LOCAL STORAGE
+
+  let reports =
+    JSON.parse(localStorage.getItem("reports")) || [];
+
+  // RENDER REPORTS
+
+  function renderReports(){
+
+    const container =
+      document.getElementById("reportsContainer");
+
+    const newCount =
+      reports.filter(r => r.status === "new").length;
+
+    const resolvedCount =
+      reports.filter(r => r.status === "resolved").length;
+
+    document.getElementById("totalReports").textContent =
+      reports.length;
+
+    document.getElementById("newReports").textContent =
+      newCount;
+
+    document.getElementById("resolvedReports").textContent =
+      resolvedCount;
+
+    // IF NO REPORTS
+
+    if(reports.length === 0){
+
+      container.innerHTML = `
+        <div class="report">
+          No reports submitted yet.
+        </div>
+      `;
+
+      return;
+
+    }
+
+    container.innerHTML = reports.map(report => `
+
+      <div class="report">
+
+        <div class="report-top">
+
+          <strong>${report.type}</strong>
+
+          <span class="badge ${
+            report.status === "new"
+            ? "badge-new"
+            : "badge-resolved"
+          }">
+
+            ${
+              report.status === "new"
+              ? "Needs Review"
+              : "Resolved"
+            }
+
+          </span>
+
+        </div>
+
+        <div class="report-info">
+          ${report.location} • ${report.time}
+        </div>
+
+        <div style="margin-bottom:10px;">
+          ${report.desc}
+        </div>
+
+        <div class="report-info">
+          Submitted by: ${report.name}
+        </div>
+
+        ${
+          report.status === "new"
+          ? `
+            <button
+              class="resolve-btn"
+              onclick="resolveReport(${report.id})">
+              Mark Resolved
+            </button>
+          `
+          : ""
+        }
+
+      </div>
+
+    `).join("");
+
+  }
+
+  // RESOLVE REPORT
+
+  function resolveReport(id){
+
+    const report =
+      reports.find(r => r.id === id);
+
+    if(report){
+
+      report.status = "resolved";
+
+      localStorage.setItem(
+        "reports",
+        JSON.stringify(reports)
+      );
+
+      renderReports();
+
+    }
+
+  }
+
+  // LOGOUT
+
+  function logout(){
+
+    window.location.href = "index.html";
+
+  }
+
+  // INITIAL LOAD
+
+  renderReports();
+
+</script>
