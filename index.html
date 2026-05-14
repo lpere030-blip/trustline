@@ -7,6 +7,7 @@
 <title>TrustLine</title>
 
 <style>
+/* (YOUR CSS STAYS EXACTLY THE SAME — NO CHANGES) */
 
 *{
   box-sizing:border-box;
@@ -20,8 +21,6 @@ body{
   color:#1a1a2e;
   padding:25px;
 }
-
-/* TOP BAR */
 
 .topbar{
   display:flex;
@@ -43,8 +42,6 @@ body{
 .staff-btn:hover{
   background:#2d2d4e;
 }
-
-/* FORM */
 
 .container{
   max-width:700px;
@@ -89,8 +86,6 @@ textarea{
 .submit-btn:hover{
   background:#2d2d4e;
 }
-
-/* DASHBOARD */
 
 #staffDashboard{
   display:none;
@@ -174,32 +169,24 @@ textarea{
 .resolve-btn:hover{
   background:#2d2d4e;
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="topbar">
-
   <h2>TrustLine</h2>
-
   <button class="staff-btn" onclick="openDashboard()">
     Staff Dashboard
   </button>
-
 </div>
 
 <!-- GUEST FORM -->
-
 <div class="container">
 
   <h1>Submit a Report</h1>
 
-  <input
-    type="text"
-    id="name"
-    placeholder="Your Name">
+  <input type="text" id="name" placeholder="Your Name">
 
   <select id="type">
     <option>Cyberbullying</option>
@@ -208,33 +195,20 @@ textarea{
     <option>Physical Bullying</option>
   </select>
 
-  <input
-    type="text"
-    id="location"
-    placeholder="Location">
+  <input type="text" id="location" placeholder="Location">
 
-  <textarea
-    id="desc"
-    rows="5"
-    placeholder="Describe what happened"></textarea>
+  <textarea id="desc" rows="5" placeholder="Describe what happened"></textarea>
 
-  <button
-    class="submit-btn"
-    onclick="submitReport()">
-
+  <button class="submit-btn" onclick="submitReport()">
     Submit Report
-
   </button>
 
 </div>
 
 <!-- STAFF DASHBOARD -->
-
 <div id="staffDashboard">
 
-  <h1 style="margin-bottom:20px;">
-    Staff Dashboard
-  </h1>
+  <h1 style="margin-bottom:20px;">Staff Dashboard</h1>
 
   <div class="stats">
 
@@ -244,29 +218,13 @@ textarea{
     </div>
 
     <div class="card">
-      <div
-        class="stat-number"
-        style="color:#b91c1c;"
-        id="newReports">
-        0
-      </div>
-
-      <div class="stat-label">
-        Need Review
-      </div>
+      <div class="stat-number" style="color:#b91c1c;" id="newReports">0</div>
+      <div class="stat-label">Need Review</div>
     </div>
 
     <div class="card">
-      <div
-        class="stat-number"
-        style="color:#15803d;"
-        id="resolvedReports">
-        0
-      </div>
-
-      <div class="stat-label">
-        Resolved
-      </div>
+      <div class="stat-number" style="color:#15803d;" id="resolvedReports">0</div>
+      <div class="stat-label">Resolved</div>
     </div>
 
   </div>
@@ -275,194 +233,149 @@ textarea{
 
 </div>
 
-<script>
+<script type="module">
 
-let reports =
-  JSON.parse(localStorage.getItem("reports")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* SUBMIT REPORT */
+/* 🔥 FIREBASE CONFIG (PASTE YOUR INFO HERE) */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_AUTH_DOMAIN",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
+};
 
-function submitReport(){
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let reports = [];
+
+/* SUBMIT REPORT (NOW ONLINE) */
+window.submitReport = async function () {
 
   const report = {
-
-    id: Date.now(),
-
-    name:
-      document.getElementById("name").value,
-
-    type:
-      document.getElementById("type").value,
-
-    location:
-      document.getElementById("location").value,
-
-    desc:
-      document.getElementById("desc").value,
-
-    status:"new",
-
-    time:"Just now"
-
+    name: document.getElementById("name").value,
+    type: document.getElementById("type").value,
+    location: document.getElementById("location").value,
+    desc: document.getElementById("desc").value,
+    status: "new",
+    time: "Just now"
   };
 
-  reports.unshift(report);
-
-  localStorage.setItem(
-    "reports",
-    JSON.stringify(reports)
-  );
+  await addDoc(collection(db, "reports"), report);
 
   alert("Report submitted successfully.");
-
   location.reload();
+};
 
-}
+/* LOAD REPORTS */
+async function loadReports() {
 
-/* OPEN STAFF DASHBOARD */
+  const snapshot = await getDocs(collection(db, "reports"));
 
-function openDashboard(){
+  reports = [];
 
-  const access =
-    prompt("Enter staff access code:");
-
-  if(access !== "tungsahur"){
-
-    alert("Access denied.");
-    return;
-
-  }
-
-  document.getElementById(
-    "staffDashboard"
-  ).style.display = "block";
-
-  renderReports();
-
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior:"smooth"
+  snapshot.forEach((docSnap) => {
+    reports.push({
+      firebaseId: docSnap.id,
+      ...docSnap.data()
+    });
   });
 
+  renderReports();
 }
 
-/* RENDER REPORTS */
+/* STAFF LOGIN + DASHBOARD */
+window.openDashboard = function () {
 
-function renderReports(){
+  const access = prompt("Enter staff access code:");
 
-  const container =
-    document.getElementById("reportsContainer");
-
-  const newCount =
-    reports.filter(r => r.status === "new").length;
-
-  const resolvedCount =
-    reports.filter(
-      r => r.status === "resolved"
-    ).length;
-
-  document.getElementById(
-    "totalReports"
-  ).textContent = reports.length;
-
-  document.getElementById(
-    "newReports"
-  ).textContent = newCount;
-
-  document.getElementById(
-    "resolvedReports"
-  ).textContent = resolvedCount;
-
-  if(reports.length === 0){
-
-    container.innerHTML = `
-      <div class="report">
-        No reports submitted yet.
-      </div>
-    `;
-
+  if (access !== "tungsahur") {
+    alert("Access denied.");
     return;
-
   }
 
-  container.innerHTML =
-    reports.map(report => `
+  document.getElementById("staffDashboard").style.display = "block";
 
-      <div class="report">
+  loadReports();
+};
 
-        <div class="report-top">
+/* RENDER DASHBOARD (UNCHANGED UI) */
+function renderReports() {
 
-          <strong>${report.type}</strong>
+  const container = document.getElementById("reportsContainer");
 
-          <span class="badge ${
-            report.status === "new"
-            ? "badge-new"
-            : "badge-resolved"
-          }">
+  const newCount = reports.filter(r => r.status === "new").length;
+  const resolvedCount = reports.filter(r => r.status === "resolved").length;
 
-            ${
-              report.status === "new"
-              ? "Needs Review"
-              : "Resolved"
-            }
+  document.getElementById("totalReports").textContent = reports.length;
+  document.getElementById("newReports").textContent = newCount;
+  document.getElementById("resolvedReports").textContent = resolvedCount;
 
-          </span>
+  if (reports.length === 0) {
+    container.innerHTML = `<div class="report">No reports submitted yet.</div>`;
+    return;
+  }
 
-        </div>
+  container.innerHTML = reports.map(report => `
+    <div class="report">
 
-        <div class="report-info">
-          ${report.location} • ${report.time}
-        </div>
+      <div class="report-top">
+        <strong>${report.type}</strong>
 
-        <div style="margin-bottom:10px;">
-          ${report.desc}
-        </div>
-
-        <div class="report-info">
-          Submitted by: ${report.name}
-        </div>
-
-        ${
-          report.status === "new"
-          ? `
-            <button
-              class="resolve-btn"
-              onclick="resolveReport(${report.id})">
-
-              Mark Resolved
-
-            </button>
-          `
-          : ""
-        }
-
+        <span class="badge ${
+          report.status === "new" ? "badge-new" : "badge-resolved"
+        }">
+          ${report.status === "new" ? "Needs Review" : "Resolved"}
+        </span>
       </div>
 
-    `).join("");
+      <div class="report-info">
+        ${report.location} • ${report.time}
+      </div>
 
+      <div style="margin-bottom:10px;">
+        ${report.desc}
+      </div>
+
+      <div class="report-info">
+        Submitted by: ${report.name}
+      </div>
+
+      ${
+        report.status === "new"
+          ? `<button class="resolve-btn"
+              onclick="resolveReport('${report.firebaseId}')">
+              Mark Resolved
+            </button>`
+          : ""
+      }
+
+    </div>
+  `).join("");
 }
 
 /* RESOLVE REPORT */
+window.resolveReport = async function (id) {
 
-function resolveReport(id){
+  const ref = doc(db, "reports", id);
 
-  const report =
-    reports.find(r => r.id === id);
+  await updateDoc(ref, {
+    status: "resolved"
+  });
 
-  if(report){
-
-    report.status = "resolved";
-
-    localStorage.setItem(
-      "reports",
-      JSON.stringify(reports)
-    );
-
-    renderReports();
-
-  }
-
-}
+  loadReports();
+};
 
 </script>
 
