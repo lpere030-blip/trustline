@@ -7,7 +7,8 @@
 <title>TrustLine</title>
 
 <style>
-/* (YOUR CSS STAYS EXACTLY THE SAME — NO CHANGES) */
+
+/* (YOUR ORIGINAL CSS — unchanged) */
 
 *{
   box-sizing:border-box;
@@ -169,6 +170,7 @@ textarea{
 .resolve-btn:hover{
   background:#2d2d4e;
 }
+
 </style>
 </head>
 
@@ -188,11 +190,26 @@ textarea{
 
   <input type="text" id="name" placeholder="Your Name">
 
+  <!-- 🔥 UPDATED DROPDOWN -->
   <select id="type">
+
     <option>Cyberbullying</option>
     <option>Verbal Harassment</option>
-    <option>Social Exclusion</option>
     <option>Physical Bullying</option>
+    <option>Social Exclusion</option>
+
+    <option>Spreading Rumors</option>
+    <option>Online Threats</option>
+    <option>Hate Speech</option>
+    <option>Group Exclusion</option>
+
+    <option>Blackmail / Extortion</option>
+    <option>Impersonation</option>
+    <option>Harassment in School</option>
+    <option>Harassment Outside School</option>
+
+    <option>Other</option>
+
   </select>
 
   <input type="text" id="location" placeholder="Location">
@@ -205,9 +222,8 @@ textarea{
 
 </div>
 
-<!-- STAFF DASHBOARD -->
+<!-- STAFF DASHBOARD (UNCHANGED) -->
 <div id="staffDashboard">
-
   <h1 style="margin-bottom:20px;">Staff Dashboard</h1>
 
   <div class="stats">
@@ -230,7 +246,6 @@ textarea{
   </div>
 
   <div id="reportsContainer"></div>
-
 </div>
 
 <script type="module">
@@ -245,7 +260,7 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* 🔥 FIREBASE CONFIG (PASTE YOUR INFO HERE) */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "PASTE_API_KEY",
   authDomain: "PASTE_AUTH_DOMAIN",
@@ -260,7 +275,7 @@ const db = getFirestore(app);
 
 let reports = [];
 
-/* SUBMIT REPORT (NOW ONLINE) */
+/* SUBMIT */
 window.submitReport = async function () {
 
   const report = {
@@ -278,14 +293,14 @@ window.submitReport = async function () {
   location.reload();
 };
 
-/* LOAD REPORTS */
+/* LOAD */
 async function loadReports() {
 
   const snapshot = await getDocs(collection(db, "reports"));
 
   reports = [];
 
-  snapshot.forEach((docSnap) => {
+  snapshot.forEach(docSnap => {
     reports.push({
       firebaseId: docSnap.id,
       ...docSnap.data()
@@ -295,7 +310,7 @@ async function loadReports() {
   renderReports();
 }
 
-/* STAFF LOGIN + DASHBOARD */
+/* DASHBOARD */
 window.openDashboard = function () {
 
   const access = prompt("Enter staff access code:");
@@ -310,7 +325,7 @@ window.openDashboard = function () {
   loadReports();
 };
 
-/* RENDER DASHBOARD (UNCHANGED UI) */
+/* RENDER */
 function renderReports() {
 
   const container = document.getElementById("reportsContainer");
@@ -365,12 +380,10 @@ function renderReports() {
   `).join("");
 }
 
-/* RESOLVE REPORT */
+/* RESOLVE */
 window.resolveReport = async function (id) {
 
-  const ref = doc(db, "reports", id);
-
-  await updateDoc(ref, {
+  await updateDoc(doc(db, "reports", id), {
     status: "resolved"
   });
 
