@@ -1,162 +1,138 @@
-<script>
+<script type="module">
 
-  // STAFF PASSWORD
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  updateDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const access = prompt("Enter staff access code:");
+/* FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_AUTH_DOMAIN",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_STORAGE_BUCKET",
+  messagingSenderId: "PASTE_SENDER_ID",
+  appId: "PASTE_APP_ID"
+};
 
-  if(access !== "tungsahur"){
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    alert("Access denied.");
-    window.location.href = "index.html";
+/* REPORTS */
+let reports = [];
 
-  }
+/* LOAD FROM FIREBASE */
+async function loadReports() {
 
-  // LOAD REPORTS FROM LOCAL STORAGE
+  const snapshot = await getDocs(collection(db, "reports"));
 
-  let reports =
-    JSON.parse(localStorage.getItem("reports")) || [];
+  reports = [];
 
-  // RENDER REPORTS
-
-  function renderReports(){
-
-    const container =
-      document.getElementById("reportsContainer");
-
-    const newCount =
-      reports.filter(r => r.status === "new").length;
-
-    const resolvedCount =
-      reports.filter(r => r.status === "resolved").length;
-
-    document.getElementById("totalReports").textContent =
-      reports.length;
-
-    document.getElementById("newReports").textContent =
-      newCount;
-
-    document.getElementById("resolvedReports").textContent =
-      resolvedCount;
-
-    // IF NO REPORTS
-
-    if(reports.length === 0){
-
-      container.innerHTML = `
-        <div class="report">
-          No reports submitted yet.
-        </div>
-      `;
-
-      return;
-
-    }
-
-    container.innerHTML = reports.map(report => `
-
-      <div class="report">
-
-        <div class="report-top">
-
-          <strong>${report.type}</strong>
-
-          <span class="badge ${
-            report.status === "new"
-            ? "badge-new"
-            : "badge-resolved"
-          }">
-
-            ${
-              report.status === "new"
-              ? "Needs Review"
-              : "Resolved"
-            }
-
-          </span>
-
-        </div>
-
-        <div class="report-info">
-          ${report.location} • ${report.time}
-        </div>
-
-        <div style="margin-bottom:10px;">
-          ${report.desc}
-        </div>
-
-        <div class="report-info">
-          Submitted by: ${report.name}
-        </div>
-
-        ${
-          report.status === "new"
-          ? `
-            <button
-              class="resolve-btn"
-              onclick="resolveReport(${report.id})">
-              Mark Resolved
-            </button>
-          `
-          : ""
-        }
-
-      </div>
-
-    `).join("");
-
-  }
-
-  // RESOLVE REPORT
-
-  function resolveReport(id){
-
-    const report =
-      reports.find(r => r.id === id);
-
-    if(report){
-
-      report.status = "resolved";
-
-      localStorage.setItem(
-        "reports",
-        JSON.stringify(reports)
-        <div class="report-info">
-  Victim: ${report.victim}
-</div>
-
-<div class="report-info">
-  Reported Person: ${report.bully}
-</div>
-
-<div class="report-info">
-  Severity: ${report.severity}
-</div>
-
-<div class="report-info">
-  Incident Date: ${report.date}
-</div>
-
-<div class="report-info">
-  Evidence: ${report.evidence || "None"}
-</div>
-      );
-
-      renderReports();
-
-    }
-
-  }
-
-  // LOGOUT
-
-  function logout(){
-
-    window.location.href = "index.html";
-
-  }
-
-  // INITIAL LOAD
+  snapshot.forEach((docSnap) => {
+    reports.push({
+      firebaseId: docSnap.id,
+      ...docSnap.data()
+    });
+  });
 
   renderReports();
+}
+
+/* RENDER */
+function renderReports() {
+
+  const container = document.getElementById("reportsContainer");
+
+  const newCount = reports.filter(r => r.status === "new").length;
+  const resolvedCount = reports.filter(r => r.status === "resolved").length;
+
+  document.getElementById("totalReports").textContent = reports.length;
+  document.getElementById("newReports").textContent = newCount;
+  document.getElementById("resolvedReports").textContent = resolvedCount;
+
+  if (reports.length === 0) {
+    container.innerHTML = `<div class="report">No reports submitted yet.</div>`;
+    return;
+  }
+
+  container.innerHTML = reports.map(report => `
+    <div class="report">
+
+      <div class="report-top">
+        <strong>${report.type}</strong>
+
+        <span class="badge ${
+          report.status === "new" ? "badge-new" : "badge-resolved"
+        }">
+          ${report.status === "new" ? "Needs Review" : "Resolved"}
+        </span>
+      </div>
+
+      <div class="report-info">
+        ${report.location} • ${report.time}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        ${report.desc}
+      </div>
+
+      <div class="report-info">
+        Submitted by: ${report.name}
+      </div>
+
+      <div class="report-info">
+        Victim: ${report.victim || "N/A"}
+      </div>
+
+      <div class="report-info">
+        Reported Person: ${report.bully || "N/A"}
+      </div>
+
+      <div class="report-info">
+        Severity: ${report.severity || "N/A"}
+      </div>
+
+      <div class="report-info">
+        Incident Date: ${report.date || "N/A"}
+      </div>
+
+      <div class="report-info">
+        Evidence: ${report.evidence || "None"}
+      </div>
+
+      ${
+        report.status === "new"
+          ? `<button class="resolve-btn"
+              onclick="resolveReport('${report.firebaseId}')">
+              Mark Resolved
+            </button>`
+          : ""
+      }
+
+    </div>
+  `).join("");
+}
+
+/* RESOLVE REPORT */
+window.resolveReport = async function (id) {
+
+  await updateDoc(doc(db, "reports", id), {
+    status: "resolved"
+  });
+
+  loadReports();
+};
+
+/* LOGOUT */
+window.logout = function () {
+  window.location.href = "index.html";
+};
+
+/* START */
+loadReports();
 
 </script>
