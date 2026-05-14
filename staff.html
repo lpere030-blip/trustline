@@ -1,4 +1,42 @@
-<script>
+<script type="module">
+
+  // FIREBASE IMPORTS
+
+  import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    updateDoc,
+    doc
+  }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // FIREBASE CONFIG
+
+  const firebaseConfig = {
+
+    apiKey: "PASTE_API_KEY",
+
+    authDomain: "PASTE_AUTH_DOMAIN",
+
+    projectId: "PASTE_PROJECT_ID",
+
+    storageBucket: "PASTE_STORAGE_BUCKET",
+
+    messagingSenderId: "PASTE_SENDER_ID",
+
+    appId: "PASTE_APP_ID"
+
+  };
+
+  // START FIREBASE
+
+  const app = initializeApp(firebaseConfig);
+
+  const db = getFirestore(app);
 
   // STAFF PASSWORD
 
@@ -7,14 +45,39 @@
   if(access !== "tungsahur"){
 
     alert("Access denied.");
+
     window.location.href = "index.html";
 
   }
 
-  // LOAD REPORTS FROM LOCAL STORAGE
+  // REPORT ARRAY
 
-  let reports =
-    JSON.parse(localStorage.getItem("reports")) || [];
+  let reports = [];
+
+  // LOAD REPORTS
+
+  async function loadReports(){
+
+    const querySnapshot =
+      await getDocs(collection(db, "reports"));
+
+    reports = [];
+
+    querySnapshot.forEach((docSnap) => {
+
+      reports.push({
+
+        firebaseId: docSnap.id,
+
+        ...docSnap.data()
+
+      });
+
+    });
+
+    renderReports();
+
+  }
 
   // RENDER REPORTS
 
@@ -93,7 +156,7 @@
           ? `
             <button
               class="resolve-btn"
-              onclick="resolveReport(${report.id})">
+              onclick="resolveReport('${report.firebaseId}')">
               Mark Resolved
             </button>
           `
@@ -108,29 +171,24 @@
 
   // RESOLVE REPORT
 
-  function resolveReport(id){
+  window.resolveReport = async function(firebaseId){
 
-    const report =
-      reports.find(r => r.id === id);
+    const reportRef =
+      doc(db, "reports", firebaseId);
 
-    if(report){
+    await updateDoc(reportRef, {
 
-      report.status = "resolved";
+      status: "resolved"
 
-      localStorage.setItem(
-        "reports",
-        JSON.stringify(reports)
-      );
+    });
 
-      renderReports();
-
-    }
+    loadReports();
 
   }
 
   // LOGOUT
 
-  function logout(){
+  window.logout = function(){
 
     window.location.href = "index.html";
 
@@ -138,6 +196,6 @@
 
   // INITIAL LOAD
 
-  renderReports();
+  loadReports();
 
 </script>
