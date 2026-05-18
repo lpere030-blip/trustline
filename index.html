@@ -8,11 +8,7 @@
 
 <style>
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body{
   font-family:Segoe UI,sans-serif;
@@ -35,11 +31,6 @@ body{
   padding:10px 18px;
   border-radius:8px;
   cursor:pointer;
-  font-weight:600;
-}
-
-.staff-btn:hover{
-  background:#2d2d4e;
 }
 
 .container{
@@ -48,139 +39,43 @@ body{
   background:white;
   padding:25px;
   border-radius:14px;
-  border:1px solid #e5e7eb;
 }
 
-h1{
-  margin-bottom:20px;
-}
-
-input,
-textarea,
-select{
+input,textarea,select{
   width:100%;
   padding:12px;
-  margin-top:8px;
-  margin-bottom:18px;
-  border:1px solid #d1d5db;
-  border-radius:8px;
-  font-size:15px;
-}
-
-textarea{
-  resize:vertical;
+  margin:10px 0;
 }
 
 .submit-btn{
   background:#1a1a2e;
   color:white;
+  padding:12px;
   border:none;
-  padding:12px 20px;
-  border-radius:8px;
   cursor:pointer;
-  font-size:15px;
-  font-weight:600;
 }
 
-.submit-btn:hover{
-  background:#2d2d4e;
-}
-
-#staffDashboard{
-  display:none;
-  margin-top:40px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-  margin-bottom:25px;
-}
-
-.card{
-  background:white;
-  border-radius:14px;
-  padding:20px;
-  border:1px solid #e5e7eb;
-}
-
-.stat-number{
-  font-size:34px;
-  font-weight:700;
-  margin-bottom:5px;
-}
-
-.stat-label{
-  color:#6b7280;
-  font-size:14px;
-}
+/* dashboard */
+#staffDashboard{display:none;margin-top:30px;}
 
 .report{
   background:white;
-  border-radius:14px;
-  padding:18px;
-  margin-bottom:15px;
-  border:1px solid #e5e7eb;
+  padding:15px;
+  margin:10px 0;
+  border:1px solid #ddd;
+  border-radius:10px;
 }
 
-.report-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-  flex-wrap:wrap;
-}
-
-.badge{
-  padding:5px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-}
-
-.badge-new{
-  background:#fee2e2;
-  color:#b91c1c;
-}
-
-.badge-resolved{
-  background:#dcfce7;
-  color:#15803d;
-}
-
-.report-info{
-  color:#6b7280;
-  font-size:13px;
-  margin-bottom:10px;
-}
-
-.resolve-btn{
-  margin-top:12px;
-  padding:8px 14px;
-  border:none;
-  border-radius:8px;
-  background:#1a1a2e;
-  color:white;
-  cursor:pointer;
-}
-
-.resolve-btn:hover{
-  background:#2d2d4e;
-}
-
-/* AI COUNSELOR */
-
+/* AI */
 .ai-btn{
   position:fixed;
   bottom:20px;
   right:20px;
   background:#1a1a2e;
   color:white;
-  padding:12px 16px;
+  padding:12px;
   border-radius:50px;
   cursor:pointer;
-  z-index:999;
 }
 
 .ai-box{
@@ -191,23 +86,21 @@ textarea{
   height:400px;
   background:white;
   border:1px solid #ccc;
-  border-radius:12px;
+  border-radius:10px;
   display:none;
   flex-direction:column;
-  z-index:999;
 }
 
 .ai-header{
   background:#1a1a2e;
   color:white;
   padding:10px;
-  font-weight:600;
 }
 
 .ai-messages{
   flex:1;
-  padding:10px;
   overflow-y:auto;
+  padding:10px;
   font-size:14px;
 }
 
@@ -219,15 +112,12 @@ textarea{
   flex:1;
   padding:10px;
   border:none;
-  border-top:1px solid #ddd;
 }
 
 .ai-input button{
   background:#1a1a2e;
   color:white;
   border:none;
-  padding:10px;
-  cursor:pointer;
 }
 
 </style>
@@ -236,69 +126,59 @@ textarea{
 <body>
 
 <div class="topbar">
-  <h2>TrustLine</h2>
-  <button class="staff-btn" onclick="openDashboard()">Staff Dashboard</button>
+<h2>TrustLine</h2>
+<button class="staff-btn" onclick="openDashboard()">Staff Dashboard</button>
 </div>
 
 <div class="container">
 
-<h1>Submit a Report</h1>
+<h1>Submit Report</h1>
 
-<input id="name" placeholder="Your Name">
+<input id="name" placeholder="Name">
 
 <select id="type">
-  <option>Cyberbullying</option>
-  <option>Verbal Harassment</option>
-  <option>Physical Bullying</option>
-  <option>Social Exclusion</option>
-  <option>Spreading Rumors</option>
-  <option>Online Threats</option>
-  <option>Hate Speech</option>
-  <option>Group Exclusion</option>
-  <option>Blackmail / Extortion</option>
-  <option>Impersonation</option>
-  <option>Harassment in School</option>
-  <option>Harassment Outside School</option>
-  <option>ball cleaner</option>
-  <option>Other</option>
+<option>Cyberbullying</option>
+<option>Verbal Harassment</option>
+<option>Physical Bullying</option>
+<option>Social Exclusion</option>
+<option>Spreading Rumors</option>
+<option>Online Threats</option>
+<option>Hate Speech</option>
+<option>Blackmail</option>
+<option>Impersonation</option>
+<option>Other</option>
 </select>
 
 <input id="location" placeholder="Location">
 
-<textarea id="desc" placeholder="Describe what happened"></textarea>
+<textarea id="desc" placeholder="Describe"></textarea>
 
-<button class="submit-btn" onclick="submitReport()">Submit Report</button>
+<button class="submit-btn" onclick="submitReport()">Submit</button>
 
 </div>
 
 <div id="staffDashboard">
 
-<h1>Staff Dashboard</h1>
-
-<div class="stats">
-  <div class="card"><div class="stat-number" id="totalReports">0</div><div class="stat-label">Total Reports</div></div>
-  <div class="card"><div class="stat-number" id="newReports">0</div><div class="stat-label">Need Review</div></div>
-  <div class="card"><div class="stat-number" id="resolvedReports">0</div><div class="stat-label">Resolved</div></div>
-</div>
+<h2>Staff Dashboard</h2>
 
 <div id="reportsContainer"></div>
 
 </div>
 
-<!-- AI BUTTON -->
+<!-- AI -->
 <div class="ai-btn" onclick="toggleAI()">AI Counselor</div>
 
 <div class="ai-box" id="aiBox">
 
-<div class="ai-header">TrustLine AI</div>
+<div class="ai-header">AI Counselor</div>
 
 <div class="ai-messages" id="aiMessages">
-  <div>Hi, I'm here to help. You can talk to me about bullying or school issues.</div>
+<div>Hi, I'm here to help you.</div>
 </div>
 
 <div class="ai-input">
-  <input id="aiInput" placeholder="Type...">
-  <button onclick="sendAI()">Send</button>
+<input id="aiInput">
+<button onclick="sendAI()">Send</button>
 </div>
 
 </div>
@@ -307,77 +187,61 @@ textarea{
 
 let reports = JSON.parse(localStorage.getItem("reports")) || [];
 
+/* SUBMIT */
 function submitReport(){
 
-  const report = {
-    id: Date.now(),
-    name: document.getElementById("name").value,
-    type: document.getElementById("type").value,
-    location: document.getElementById("location").value,
-    desc: document.getElementById("desc").value,
-    status: "new",
-    time: new Date().toLocaleString()
+  const r = {
+    id:Date.now(),
+    name:document.getElementById("name").value,
+    type:document.getElementById("type").value,
+    location:document.getElementById("location").value,
+    desc:document.getElementById("desc").value,
+    status:"new",
+    time:new Date().toLocaleString()
   };
 
-  reports.unshift(report);
+  reports.unshift(r);
 
-  localStorage.setItem("reports", JSON.stringify(reports));
+  localStorage.setItem("reports",JSON.stringify(reports));
 
-  alert("Report submitted!");
-
+  alert("Submitted!");
   location.reload();
 }
 
+/* DASHBOARD */
 function openDashboard(){
 
-  const access = prompt("Enter staff access code:");
+  const code = prompt("Enter staff code:");
 
-  if(access !== "Doral2025"){
-    alert("Access denied.");
+  if(code !== "Doral2025"){
+    alert("Wrong code");
     return;
   }
 
-  document.getElementById("staffDashboard").style.display = "block";
+  document.getElementById("staffDashboard").style.display="block";
   renderReports();
 }
 
+/* RENDER */
 function renderReports(){
 
-  document.getElementById("totalReports").textContent = reports.length;
-  document.getElementById("newReports").textContent = reports.filter(r=>r.status==="new").length;
-  document.getElementById("resolvedReports").textContent = reports.filter(r=>r.status==="resolved").length;
-
-  const container = document.getElementById("reportsContainer");
+  const c = document.getElementById("reportsContainer");
 
   if(reports.length === 0){
-    container.innerHTML = "<div class='report'>No reports yet</div>";
+    c.innerHTML = "<div class='report'>No reports</div>";
     return;
   }
 
-  container.innerHTML = reports.map(r => `
+  c.innerHTML = reports.map(r => `
     <div class="report">
-      <strong>${r.type}</strong>
-      <div class="report-info">${r.location} • ${r.time}</div>
-      <div>${r.desc}</div>
-      <div>By: ${r.name}</div>
-
-      ${r.status === "new" ? `
-      <button class="resolve-btn" onclick="resolveReport(${r.id})">
-        Mark Resolved
-      </button>` : ""}
+      <b>${r.type}</b><br>
+      ${r.desc}<br>
+      <small>${r.location} • ${r.time}</small>
     </div>
   `).join("");
 }
 
-function resolveReport(id){
-  const r = reports.find(x => x.id === id);
-  r.status = "resolved";
-  localStorage.setItem("reports", JSON.stringify(reports));
-  renderReports();
-}
-
 /* AI */
-
 function toggleAI(){
   const box = document.getElementById("aiBox");
   box.style.display = box.style.display === "flex" ? "none" : "flex";
@@ -396,10 +260,10 @@ function sendAI(){
   let reply = "I'm here for you.";
 
   if(msg.includes("bully")){
-    reply = "Bullying is serious. Talking to a trusted adult helps.";
+    reply = "Bullying is serious. Try talking to a trusted adult.";
   }
   if(msg.includes("sad")){
-    reply = "I'm here for you. You are not alone.";
+    reply = "You're not alone. I'm here for you.";
   }
 
   chat.innerHTML += `<div><b>AI:</b> ${reply}</div>`;
