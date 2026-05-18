@@ -76,19 +76,21 @@ input,textarea,select{
   padding:12px;
   border-radius:50px;
   cursor:pointer;
+  z-index:999;
 }
 
 .ai-box{
   position:fixed;
   bottom:80px;
   right:20px;
-  width:300px;
-  height:400px;
+  width:320px;
+  height:420px;
   background:white;
   border:1px solid #ccc;
-  border-radius:10px;
+  border-radius:12px;
   display:none;
   flex-direction:column;
+  z-index:999;
 }
 
 .ai-header{
@@ -112,12 +114,15 @@ input,textarea,select{
   flex:1;
   padding:10px;
   border:none;
+  outline:none;
 }
 
 .ai-input button{
   background:#1a1a2e;
   color:white;
   border:none;
+  padding:10px;
+  cursor:pointer;
 }
 
 </style>
@@ -158,26 +163,23 @@ input,textarea,select{
 </div>
 
 <div id="staffDashboard">
-
 <h2>Staff Dashboard</h2>
-
 <div id="reportsContainer"></div>
-
 </div>
 
-<!-- AI -->
+<!-- AI BUTTON -->
 <div class="ai-btn" onclick="toggleAI()">AI Counselor</div>
 
 <div class="ai-box" id="aiBox">
 
-<div class="ai-header">AI Counselor</div>
+<div class="ai-header">TrustLine AI Counselor</div>
 
 <div class="ai-messages" id="aiMessages">
-<div>Hi, I'm here to help you.</div>
+<div><b>AI:</b> Hi, I’m here to support you with bullying, stress, or school problems.</div>
 </div>
 
 <div class="ai-input">
-<input id="aiInput">
+<input id="aiInput" placeholder="Type a message...">
 <button onclick="sendAI()">Send</button>
 </div>
 
@@ -187,24 +189,23 @@ input,textarea,select{
 
 let reports = JSON.parse(localStorage.getItem("reports")) || [];
 
-/* SUBMIT */
+/* REPORTS */
 function submitReport(){
 
   const r = {
-    id:Date.now(),
-    name:document.getElementById("name").value,
-    type:document.getElementById("type").value,
-    location:document.getElementById("location").value,
-    desc:document.getElementById("desc").value,
-    status:"new",
-    time:new Date().toLocaleString()
+    id: Date.now(),
+    name: document.getElementById("name").value,
+    type: document.getElementById("type").value,
+    location: document.getElementById("location").value,
+    desc: document.getElementById("desc").value,
+    status: "new",
+    time: new Date().toLocaleString()
   };
 
   reports.unshift(r);
+  localStorage.setItem("reports", JSON.stringify(reports));
 
-  localStorage.setItem("reports",JSON.stringify(reports));
-
-  alert("Submitted!");
+  alert("Report submitted!");
   location.reload();
 }
 
@@ -212,7 +213,6 @@ function submitReport(){
 function openDashboard(){
 
   const code = prompt("Enter staff code:");
-
   if(code !== "Doral2025"){
     alert("Wrong code");
     return;
@@ -228,7 +228,7 @@ function renderReports(){
   const c = document.getElementById("reportsContainer");
 
   if(reports.length === 0){
-    c.innerHTML = "<div class='report'>No reports</div>";
+    c.innerHTML = "<div class='report'>No reports yet</div>";
     return;
   }
 
@@ -247,7 +247,7 @@ function toggleAI(){
   box.style.display = box.style.display === "flex" ? "none" : "flex";
 }
 
-function sendAI(){
+async function sendAI(){
 
   const input = document.getElementById("aiInput");
   const msg = input.value.trim();
@@ -256,19 +256,17 @@ function sendAI(){
   const chat = document.getElementById("aiMessages");
 
   chat.innerHTML += `<div><b>You:</b> ${msg}</div>`;
-
-  let reply = "I'm here for you.";
-
-  if(msg.includes("bully")){
-    reply = "Bullying is serious. Try talking to a trusted adult.";
-  }
-  if(msg.includes("sad")){
-    reply = "You're not alone. I'm here for you.";
-  }
-
-  chat.innerHTML += `<div><b>AI:</b> ${reply}</div>`;
-
   input.value = "";
+
+  const res = await fetch("YOUR-BACKEND-URL/chat", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ message: msg })
+  });
+
+  const data = await res.json();
+
+  chat.innerHTML += `<div><b>AI:</b> ${data.reply}</div>`;
 }
 
 </script>
