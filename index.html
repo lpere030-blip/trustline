@@ -3,19 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>TrustLine</title>
+<title>TrustLine Reporting System</title>
 
 <style>
-
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
 }
 
 body{
-  font-family:Segoe UI,sans-serif;
+  font-family:Segoe UI, sans-serif;
   background:#f4f6f9;
   color:#1a1a2e;
   padding:25px;
@@ -43,7 +41,7 @@ body{
 }
 
 .container{
-  max-width:700px;
+  max-width:800px;
   margin:auto;
   background:white;
   padding:25px;
@@ -51,7 +49,8 @@ body{
   border:1px solid #e5e7eb;
 }
 
-h1{
+.subtitle{
+  color:#6b7280;
   margin-bottom:20px;
 }
 
@@ -64,7 +63,6 @@ select{
   margin-bottom:18px;
   border:1px solid #d1d5db;
   border-radius:8px;
-  font-size:15px;
 }
 
 textarea{
@@ -78,19 +76,15 @@ textarea{
   padding:12px 20px;
   border-radius:8px;
   cursor:pointer;
-  font-size:15px;
-  font-weight:600;
 }
 
 .submit-btn:hover{
   background:#2d2d4e;
 }
 
-/* DASHBOARD */
-
 #staffDashboard{
   display:none;
-  margin-top:40px;
+  margin-top:50px;
 }
 
 .stats{
@@ -102,36 +96,32 @@ textarea{
 
 .card{
   background:white;
+  border:1px solid #e5e7eb;
   border-radius:14px;
   padding:20px;
-  border:1px solid #e5e7eb;
 }
 
 .stat-number{
-  font-size:34px;
-  font-weight:700;
-  margin-bottom:5px;
+  font-size:32px;
+  font-weight:bold;
 }
 
 .stat-label{
   color:#6b7280;
-  font-size:14px;
 }
 
 .report{
   background:white;
+  border:1px solid #e5e7eb;
   border-radius:14px;
   padding:18px;
   margin-bottom:15px;
-  border:1px solid #e5e7eb;
 }
 
-.report-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-  flex-wrap:wrap;
+.report-info{
+  color:#6b7280;
+  font-size:13px;
+  margin-top:5px;
 }
 
 .badge{
@@ -151,9 +141,9 @@ textarea{
   color:#15803d;
 }
 
-.report-info{
-  color:#6b7280;
-  font-size:13px;
+.report-top{
+  display:flex;
+  justify-content:space-between;
   margin-bottom:10px;
 }
 
@@ -166,161 +156,74 @@ textarea{
   color:white;
   cursor:pointer;
 }
-
-.resolve-btn:hover{
-  background:#2d2d4e;
-}
-
-/* AI COUNSELOR */
-
-.ai-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#1a1a2e;
-  color:white;
-  border:none;
-  padding:14px 18px;
-  border-radius:999px;
-  cursor:pointer;
-  z-index:1000;
-}
-
-.ai-box{
-  position:fixed;
-  bottom:85px;
-  right:20px;
-  width:320px;
-  height:420px;
-  background:white;
-  border:1px solid #d1d5db;
-  border-radius:14px;
-  display:none;
-  flex-direction:column;
-  overflow:hidden;
-  z-index:1000;
-}
-
-.ai-header{
-  background:#1a1a2e;
-  color:white;
-  padding:12px;
-  font-weight:600;
-}
-
-.ai-messages{
-  flex:1;
-  padding:12px;
-  overflow-y:auto;
-  font-size:14px;
-}
-
-.ai-message{
-  margin-bottom:12px;
-}
-
-.ai-input{
-  display:flex;
-  border-top:1px solid #e5e7eb;
-}
-
-.ai-input input{
-  flex:1;
-  border:none;
-  margin:0;
-  border-radius:0;
-}
-
-.ai-input button{
-  background:#1a1a2e;
-  color:white;
-  border:none;
-  padding:0 16px;
-  cursor:pointer;
-}
-
 </style>
 </head>
-
 <body>
 
 <div class="topbar">
-
   <h2>TrustLine</h2>
 
   <button class="staff-btn" onclick="openDashboard()">
     Staff Dashboard
   </button>
-
 </div>
-
-<!-- REPORT FORM -->
 
 <div class="container">
 
   <h1>Submit a Report</h1>
 
-  <input
-    type="text"
-    id="name"
-    placeholder="Your Name">
+  <p class="subtitle">
+    Help make your school a safer place.
+    Anonymous reports are allowed.
+  </p>
+
+  <input type="text" id="name" placeholder="Your Name (Optional)">
+
+  <input type="text" id="victim" placeholder="Who is being bullied?">
+
+  <input type="text" id="bully" placeholder="Who is responsible?">
 
   <select id="type">
-
     <option>Cyberbullying</option>
     <option>Verbal Harassment</option>
-    <option>Physical Bullying</option>
     <option>Social Exclusion</option>
-
-    <option>Spreading Rumors</option>
-    <option>Online Threats</option>
-    <option>Hate Speech</option>
-    <option>Group Exclusion</option>
-
-    <option>Blackmail / Extortion</option>
-    <option>Impersonation</option>
-    <option>Harassment in School</option>
-    <option>Harassment Outside School</option>
-
-    <option>Threatening Messages</option>
-    <option>Repeated Targeting</option>
-    <option>Public Humiliation</option>
-    <option>Embarrassing Photos Shared</option>
-
+    <option>Physical Bullying</option>
+    <option>Threats or Intimidation</option>
+    <option>Rumors or Gossip</option>
     <option>Discrimination</option>
-    <option>Damage to Property</option>
-    <option>Physical Intimidation</option>
-
-
     <option>Other</option>
-
   </select>
 
-  <input
-    type="text"
-    id="location"
-    placeholder="Location">
+  <select id="severity">
+    <option>Low Severity</option>
+    <option>Medium Severity</option>
+    <option>High Severity</option>
+    <option>Emergency</option>
+  </select>
+
+  <input type="text" id="location" placeholder="Location">
+
+  <input type="date" id="date">
 
   <textarea
     id="desc"
     rows="5"
     placeholder="Describe what happened"></textarea>
 
-  <button
-    class="submit-btn"
-    onclick="submitReport()">
+  <textarea
+    id="evidence"
+    rows="3"
+    placeholder="Evidence, usernames, links, screenshots, etc."></textarea>
 
+  <button class="submit-btn" onclick="submitReport()">
     Submit Report
-
   </button>
 
 </div>
 
-<!-- STAFF DASHBOARD -->
-
 <div id="staffDashboard">
 
-  <h1 style="margin-bottom:20px;">
+  <h1 style="margin:30px 0 20px;">
     Staff Dashboard
   </h1>
 
@@ -332,29 +235,13 @@ textarea{
     </div>
 
     <div class="card">
-      <div
-        class="stat-number"
-        style="color:#b91c1c;"
-        id="newReports">
-        0
-      </div>
-
-      <div class="stat-label">
-        Need Review
-      </div>
+      <div class="stat-number" id="newReports">0</div>
+      <div class="stat-label">Need Review</div>
     </div>
 
     <div class="card">
-      <div
-        class="stat-number"
-        style="color:#15803d;"
-        id="resolvedReports">
-        0
-      </div>
-
-      <div class="stat-label">
-        Resolved
-      </div>
+      <div class="stat-number" id="resolvedReports">0</div>
+      <div class="stat-label">Resolved</div>
     </div>
 
   </div>
@@ -363,47 +250,10 @@ textarea{
 
 </div>
 
-
-
-
-
-<div class="ai-box" id="aiBox">
-
-  <div class="ai-header">
-  </div>
-
-  <div class="ai-messages" id="aiMessages">
-
-    <div class="ai-message">
-      <b>AI:</b>
-      Hi, I’m here to help with bullying, stress, or school concerns.
-    </div>
-
-  </div>
-
-  <div class="ai-input">
-
-    <input
-      type="text"
-      id="aiInput"
-      placeholder="Type a message...">
-
-    <button onclick="sendAI()">
-      Send
-    </button>
-
-  </div>
-
-</div>
-
 <script>
-
-/* STORAGE */
 
 let reports =
   JSON.parse(localStorage.getItem("reports")) || [];
-
-/* SUBMIT REPORT */
 
 function submitReport(){
 
@@ -412,21 +262,35 @@ function submitReport(){
     id: Date.now(),
 
     name:
-      document.getElementById("name").value,
+      document.getElementById("name").value || "Anonymous",
+
+    victim:
+      document.getElementById("victim").value,
+
+    bully:
+      document.getElementById("bully").value,
 
     type:
       document.getElementById("type").value,
 
+    severity:
+      document.getElementById("severity").value,
+
     location:
       document.getElementById("location").value,
+
+    date:
+      document.getElementById("date").value,
 
     desc:
       document.getElementById("desc").value,
 
+    evidence:
+      document.getElementById("evidence").value,
+
     status:"new",
 
-    time:
-      new Date().toLocaleString()
+    time:new Date().toLocaleString()
 
   };
 
@@ -442,17 +306,16 @@ function submitReport(){
   location.reload();
 }
 
-/* OPEN DASHBOARD */
-
 function openDashboard(){
 
   const access =
     prompt("Enter staff access code:");
 
-  if(access !== "Doral2025"){
+  if(access !== "tungsahur"){
 
     alert("Access denied.");
     return;
+
   }
 
   document.getElementById(
@@ -462,12 +325,10 @@ function openDashboard(){
   renderReports();
 
   window.scrollTo({
-    top: document.body.scrollHeight,
+    top:document.body.scrollHeight,
     behavior:"smooth"
   });
 }
-
-/* RENDER REPORTS */
 
 function renderReports(){
 
@@ -478,90 +339,99 @@ function renderReports(){
     reports.filter(r => r.status === "new").length;
 
   const resolvedCount =
-    reports.filter(
-      r => r.status === "resolved"
-    ).length;
+    reports.filter(r => r.status === "resolved").length;
 
-  document.getElementById(
-    "totalReports"
-  ).textContent = reports.length;
+  document.getElementById("totalReports").textContent =
+    reports.length;
 
-  document.getElementById(
-    "newReports"
-  ).textContent = newCount;
+  document.getElementById("newReports").textContent =
+    newCount;
 
-  document.getElementById(
-    "resolvedReports"
-  ).textContent = resolvedCount;
+  document.getElementById("resolvedReports").textContent =
+    resolvedCount;
 
   if(reports.length === 0){
 
-    container.innerHTML = `
-      <div class="report">
-        No reports submitted yet.
-      </div>
-    `;
+    container.innerHTML =
+      "<div class='report'>No reports submitted yet.</div>";
 
     return;
   }
 
-  container.innerHTML =
-    reports.map(report => `
+  container.innerHTML = reports.map(report => `
 
-      <div class="report">
+    <div class="report">
 
-        <div class="report-top">
+      <div class="report-top">
 
-          <strong>${report.type}</strong>
+        <strong>${report.type}</strong>
 
-          <span class="badge ${
-            report.status === "new"
-            ? "badge-new"
-            : "badge-resolved"
-          }">
-
-            ${
-              report.status === "new"
-              ? "Needs Review"
-              : "Resolved"
-            }
-
-          </span>
-
-        </div>
-
-        <div class="report-info">
-          ${report.location} • ${report.time}
-        </div>
-
-        <div style="margin-bottom:10px;">
-          ${report.desc}
-        </div>
-
-        <div class="report-info">
-          Submitted by: ${report.name}
-        </div>
-
-        ${
+        <span class="badge ${
           report.status === "new"
-          ? `
-            <button
-              class="resolve-btn"
-              onclick="resolveReport(${report.id})">
+          ? "badge-new"
+          : "badge-resolved"
+        }">
 
-              Mark Resolved
+          ${
+            report.status === "new"
+            ? "Needs Review"
+            : "Resolved"
+          }
 
-            </button>
-          `
-          : ""
-        }
+        </span>
 
       </div>
 
-    `).join("");
-}
+      <div>${report.desc}</div>
 
-/* RESOLVE */
+      <div class="report-info">
+        Submitted By: ${report.name}
+      </div>
+
+      <div class="report-info">
+        Victim: ${report.victim}
+      </div>
+
+      <div class="report-info">
+        Reported Person: ${report.bully}
+      </div>
+
+      <div class="report-info">
+        Severity: ${report.severity}
+      </div>
+
+      <div class="report-info">
+        Location: ${report.location}
+      </div>
+
+      <div class="report-info">
+        Date: ${report.date}
+      </div>
+
+      <div class="report-info">
+        Evidence: ${report.evidence || "None"}
+      </div>
+
+      <div class="report-info">
+        Submitted: ${report.time}
+      </div>
+
+      ${
+        report.status === "new"
+        ? `
+          <button
+            class="resolve-btn"
+            onclick="resolveReport(${report.id})">
+            Mark Resolved
+          </button>
+        `
+        : ""
+      }
+
+    </div>
+
+  `).join("");
+}
 
 function resolveReport(id){
 
@@ -579,99 +449,6 @@ function resolveReport(id){
 
     renderReports();
   }
-}
-
-/* AI OPEN/CLOSE */
-
-function toggleAI(){
-
-  const box =
-    document.getElementById("aiBox");
-
-  if(box.style.display === "flex"){
-
-    box.style.display = "none";
-
-  }else{
-
-    box.style.display = "flex";
-  }
-}
-
-/* AI CHAT */
-
-function sendAI(){
-
-  const input =
-    document.getElementById("aiInput");
-
-  const message =
-    input.value.trim();
-
-  if(message === "") return;
-
-  const chat =
-    document.getElementById("aiMessages");
-
-  chat.innerHTML += `
-    <div class="ai-message">
-      <b>You:</b> ${message}
-    </div>
-  `;
-
-  let response =
-    "I'm here to listen and help.";
-
-  const lower =
-    message.toLowerCase();
-
-  if(lower.includes("bully")){
-
-    response =
-      "Bullying can be difficult to deal with. Consider speaking with a trusted adult, counselor, or teacher.";
-
-  }else if(
-    lower.includes("sad") ||
-    lower.includes("upset")
-  ){
-
-    response =
-      "I'm sorry you're feeling that way. Talking to someone you trust can really help.";
-
-  }else if(
-    lower.includes("stress") ||
-    lower.includes("anxious")
-  ){
-
-    response =
-      "School stress can build up. Try taking short breaks and reaching out for support if needed.";
-
-  }else if(
-    lower.includes("friend")
-  ){
-
-    response =
-      "Friendship problems can hurt. Honest communication and support from trusted people can help.";
-
-  }else if(
-    lower.includes("scared")
-  ){
-
-    response =
-      "If you feel unsafe or threatened, contact a trusted adult, parent, teacher, or school staff member.";
-
-  }
-
-  chat.innerHTML += `
-    <div class="ai-message">
-      <b>AI:</b> ${response}
-    </div>
-  `;
-
-  input.value = "";
-
-  chat.scrollTop =
-    chat.scrollHeight;
 }
 
 </script>
